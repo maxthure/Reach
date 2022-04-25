@@ -1,6 +1,6 @@
 import React from "react";
 import Navigation from "../components/navigation";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class Project extends React.Component {
 
@@ -11,11 +11,13 @@ class Project extends React.Component {
                     <Navigation />
                 </header>
                 <div>
-                    <button>Export Template</button><br /><br />
+                    <Link to="/templates">
+                        <button>Export Template</button>
+                    </Link><br /><br />
 
-                    Project Name: { this.props.name } <br />
+                    <h1>LTE-Advanced</h1>
                     <Link to="documentation">Documentation</Link> <br />
-                    Info: { this.props.info } <br />
+                    Info: The measurement of the LTE-Advanced Standard <br />
                     Issues: <br />
 
                     <Link to="issue">Issue 1</Link> <br />

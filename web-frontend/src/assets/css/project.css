@@ -5,3 +5,13 @@
     border: 2px solid black;
     padding: 5px;
 }
+
+.add-collaborators {
+    margin: 10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #D2CECD;
+    text-align: center;
+    cursor: pointer;
+}

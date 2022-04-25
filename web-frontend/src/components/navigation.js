@@ -13,8 +13,8 @@ class Navigation extends React.Component {
                 }}
             >
                 <p>Username: Lorenzo von Matterhorn</p>
-                <Link to="/somewhereelse">Somewhere else</Link> | {" "}
-                <Link to="/profile">Profile</Link>
+                <Link to="/">Projects</Link> | {" "}
+                <Link to="/new-project">New Project</Link>
             </nav>
         );
     }

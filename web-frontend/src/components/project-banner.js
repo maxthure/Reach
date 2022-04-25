@@ -5,11 +5,13 @@ import {Link} from "react-router-dom";
 class ProjectBanner extends React.Component {
 
     render() {
+        let url = "/projects/" + this.props.projectId;
+
         return (
             <div className={"project"}>
                 <b>Project Name:</b> <br /> { this.props.name } <br />
                 <b>Project Description:</b> <br /> { this.props.description } <br />
-                <Link to="/lte-advanced" className={"project-link"}>Go to Project</Link>
+                <Link to={ url } className={"project-link"}>Go to Project</Link>
             </div>
         );
     }
