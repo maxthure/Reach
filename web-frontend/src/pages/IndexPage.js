@@ -4,6 +4,21 @@ import Navigation from "../components/navigation";
 import ProjectBanner from "../components/project-banner";
 import {Link} from "react-router-dom";
 
+import myProjects from "../Projects.json"
+
+function ProjectList() {
+    const listProject = myProjects.projects.map((project) =>
+        <ProjectBanner
+        name={project.name}
+        description={project.description}
+        projectId={project.id}
+        />
+    );
+    return (
+        listProject
+    );
+}
+
 class IndexPage extends React.Component {
 
     render() {
@@ -17,16 +32,7 @@ class IndexPage extends React.Component {
                     <Link to="/new-project"><button>New Project</button></Link>
                 </div>
                 <div className={"recent-projects"}>
-                    <ProjectBanner
-                        name="LTE-Advanced"
-                        description="A measurement of the LTE-Advanced Standard"
-                        projectId="1"
-                    />
-                    <ProjectBanner
-                        name="USB Certification"
-                        description="Certify the new Apple Air USB Stick."
-                        projectId="2"
-                    />
+                    <ProjectList />
                 </div>
             </div>
         );

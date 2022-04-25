@@ -2,6 +2,19 @@ import React from "react";
 import Navigation from "../components/navigation";
 import { Link } from "react-router-dom";
 
+import myIssues from "../Issues.json"
+
+function IssueList() {
+    const listIssues = myIssues.issues.map((issue) =>
+        <div key={issue.id}>
+            <Link to={"issue_"+issue.id}>{issue.name}</Link>
+        </div>
+    );
+    return (
+        listIssues
+    );
+}
+
 class Project extends React.Component {
 
     render() {
@@ -20,14 +33,7 @@ class Project extends React.Component {
                     Info: The measurement of the LTE-Advanced Standard <br />
                     Issues: <br />
 
-                    <Link to="issue">Issue 1</Link> <br />
-                    <Link to="issue">Issue 2</Link> <br />
-                    <Link to="issue">Issue 3</Link> <br />
-                    <Link to="issue">Issue 4</Link> <br />
-                    <Link to="issue">Issue 5</Link> <br />
-                    <Link to="issue">Issue 6</Link> <br />
-                    <Link to="issue">Issue 7</Link> <br />
-
+                    <IssueList />
                 </div>
             </div>
         );

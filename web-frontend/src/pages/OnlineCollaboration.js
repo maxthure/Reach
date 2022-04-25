@@ -9,7 +9,7 @@ function OnlineCollaboration() {
 
     let { projectId } = useParams();
 
-    let url = "/projects/" + projectId;
+    let url = "/projects/project_" + projectId;
     return (
         <div>
             <header>

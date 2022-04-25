@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 class ProjectBanner extends React.Component {
 
     render() {
-        let url = "/projects/" + this.props.projectId;
+        let url = "/projects/project_" + this.props.projectId;
 
         return (
             <div className={"project"}>

@@ -1,0 +1,10 @@
+{
+  "projects": [
+    {"name": "LTE-Advanced",
+      "id":  1,
+      "description": "A measurement of the LTE-Advanced Standard"},
+    {"name": "USB-Certification",
+      "id":  2,
+      "description": "Certify the new Apple Air USB Stick"}
+  ]
+}
