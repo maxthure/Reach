@@ -20,5 +20,5 @@ from .project import test_projects
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('testprojects/', test_projects, name='project'),
+    path('testprojects/<str:project_id>', test_projects, name='project'),
 ]
