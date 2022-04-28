@@ -1,0 +1,146 @@
+{
+  "recent_projects": [
+    {
+      "id": "1",
+      "name": "LTE-Advanced",
+      "owner": "Lorenzo von Matterhorn",
+      "collaborators": [
+        "Micky Krause",
+        "Olaf Scholz"
+      ],
+      "viewers": [
+        "Mario Götze",
+        "Judith Rakers"
+      ],
+      "created_at": "2022-04-26T13:09:14",
+      "measurements": [
+        "meas1"
+      ],
+      "description": "",
+      "info": "",
+      "last_accessed": "2022-04-28T13:32:33",
+      "issues": [
+        {
+          "id": "1",
+          "name": "Issue 1"
+        },
+        {
+          "id": "2",
+          "name": "Issue 2"
+        },{
+          "id": "3",
+          "name": "Issue 3"
+        },{
+          "id": "4",
+          "name": "Issue 4"
+        },{
+          "id": "5",
+          "name": "Issue 5"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "USB-Certification",
+      "owner": "Olaf Scholz",
+      "collaborators": [
+        "Micky Krause",
+        "Lorenzo von Matterhorn"
+      ],
+      "viewers": [
+        "Mario Götze",
+        "Judith Rakers"
+      ],
+      "created_at": "2022-04-28T13:20:25",
+      "measurements": [],
+      "description": "",
+      "info": "",
+      "last_accessed": "2022-04-28T13:44:39",
+      "issues": [
+        {
+          "id": "1",
+          "name": "Issue 1"
+        },
+        {
+          "id": "2",
+          "name": "Issue 2"
+        },{
+          "id": "3",
+          "name": "Issue 3"
+        }
+      ]
+    }
+  ],
+  "all_projects": [
+    {
+      "id": "1",
+      "name": "LTE-Advanced",
+      "owner": "Lorenzo von Matterhorn",
+      "collaborators": [
+        "Micky Krause",
+        "Olaf Scholz"
+      ],
+      "viewers": [
+        "Mario Götze",
+        "Judith Rakers"
+      ],
+      "created_at": "2022-04-26T13:09:14",
+      "measurements": [
+        "meas1"
+      ],
+      "description": "",
+      "info": "",
+      "last_accessed": "2022-04-28T13:32:33",
+      "issues": [
+        {
+          "id": "1",
+          "name": "Issue 1"
+        },
+        {
+          "id": "2",
+          "name": "Issue 2"
+        },{
+          "id": "3",
+          "name": "Issue 3"
+        },{
+          "id": "4",
+          "name": "Issue 4"
+        },{
+          "id": "5",
+          "name": "Issue 5"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "USB-Certification",
+      "owner": "Olaf Scholz",
+      "collaborators": [
+        "Micky Krause",
+        "Lorenzo von Matterhorn"
+      ],
+      "viewers": [
+        "Mario Götze",
+        "Judith Rakers"
+      ],
+      "created_at": "2022-04-28T13:20:25",
+      "measurements": [],
+      "description": "",
+      "info": "",
+      "last_accessed": "2022-04-28T13:44:39",
+      "issues": [
+        {
+          "id": "1",
+          "name": "Issue 1"
+        },
+        {
+          "id": "2",
+          "name": "Issue 2"
+        },{
+          "id": "3",
+          "name": "Issue 3"
+        }
+      ]
+    }
+  ]
+}
