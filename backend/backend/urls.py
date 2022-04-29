@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+
+import backend
 from .project import test_projects
+from .doorman.doorman import get_all_projects
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('testprojects/<str:project_id>', test_projects, name='project'),
+    path('all-projects', get_all_projects)
 ]
