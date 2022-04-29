@@ -3,20 +3,56 @@ import '../assets/css/indexpage.css';
 import Navigation from "../components/navigation";
 import ProjectBanner from "../components/project-banner";
 import {Link} from "react-router-dom";
+import { backendUrl } from "../config";
 
-import myProjects from "../Projects.json"
 
-function ProjectList() {
-    const listProject = myProjects.projects.map((project) =>
-        <ProjectBanner
-        name={project.name}
-        description={project.description}
-        projectId={project.id}
-        />
-    );
-    return (
-        listProject
-    );
+class ProjectList extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            projectList: []
+        };
+    }
+
+    addProject(project) {
+        this.state.projectList.push({
+            name: project.name,
+            description: project.description,
+            id: project.id
+        })
+        this.forceUpdate()
+    }
+
+    componentDidMount() {
+        this.fetchProjects()
+    }
+
+    fetchProjects = async () => {
+        await fetch(backendUrl + '/testprojects/project1')
+            .then(response => response.json())
+            .then(json => {
+                for (let p of json.recent_projects) {
+                    this.addProject(p);
+                }
+            })
+    }
+
+    render() {
+        return (
+            <div className={"recent-projects"}>
+                { this.state.projectList.map(p =>
+                    <ProjectBanner
+                        name={p.name}
+                        description={p.description}
+                        projectId={p.id}
+                        key={p.id}
+                    />
+                )}
+            </div>
+        )
+    }
+
 }
 
 class IndexPage extends React.Component {
@@ -31,9 +67,7 @@ class IndexPage extends React.Component {
                 <div>
                     <Link to="/new-project"><button>New Project</button></Link>
                 </div>
-                <div className={"recent-projects"}>
-                    <ProjectList />
-                </div>
+                <ProjectList />
             </div>
         );
     }
