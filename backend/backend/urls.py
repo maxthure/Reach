@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .project import test_projects, test_index, test_documentation, test_issue
+from .project import index
 
 
 urlpatterns = [
@@ -23,5 +24,6 @@ urlpatterns = [
     path('testindex', test_index),
     path('testprojects/<str:project_id>', test_projects),
     path('testdocu/<str:project_id>', test_documentation),
-    path('testissue/<str:project_id>/<str:issue_id>', test_issue)
+    path('testissue/<str:project_id>/<str:issue_id>', test_issue),
+    path('index/', index)
 ]
