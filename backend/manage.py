@@ -6,11 +6,14 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    for c in range(0, len(sys.argv) - 1):
+    params = []
+    for c in range(0, len(sys.argv)):
         param = sys.argv[c]
         if param == "--cwd":
             os.chdir(sys.argv[c + 1])
-            break
+        else:
+            params.append(param)
+    print(params)
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
     try:
@@ -21,7 +24,7 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
-    execute_from_command_line(sys.argv)
+    execute_from_command_line(params)
 
 
 if __name__ == '__main__':
