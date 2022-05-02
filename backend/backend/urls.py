@@ -15,19 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .project import test_projects, test_index, test_documentation, test_issue
-from .project import index
-import backend
+from .project import test_projects, test_index, test_documentation, test_issue, populate
+from .project import index, project, issue, documentation
 from .doorman.doorman import get_all_projects
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('testindex', test_index),
+    path('testindex/', test_index),
     path('testprojects/<str:project_id>', test_projects),
     path('testdocu/<str:project_id>', test_documentation),
     path('testissue/<str:project_id>/<str:issue_id>', test_issue),
+    path('populate/', populate),
+
     path('index/', index),
+    path('project/<str:project_id>/', project),
+    path('issue/<str:project_id>/<str:issue_id>/', issue),
+    path('docu/<str:project_id>/', documentation),
     path('all-projects', get_all_projects)
 ]
