@@ -7,13 +7,15 @@ import sys
 def main():
     """Run administrative tasks."""
     params = []
-    for c in range(0, len(sys.argv)):
-        param = sys.argv[c]
-        if param == "--cwd":
-            os.chdir(sys.argv[c + 1])
-            c = c + 1
-        else:
-            params.append(param)
+    if sys.argv[len(sys.argv) - 2] == "--cwd":
+        print("Changing directory")
+        os.chdir(sys.argv[len(sys.argv) - 1])
+        for c in range(0, len(sys.argv) - 2):
+            params.append(sys.argv[c])
+    else:
+        for p in sys.argv:
+            params.append(p)
+
     print(params)
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
