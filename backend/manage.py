@@ -6,6 +6,12 @@ import sys
 
 def main():
     """Run administrative tasks."""
+    for c in range(0, len(sys.argv) - 1):
+        param = sys.argv[c]
+        if param == "--cwd":
+            os.chdir(sys.argv[c + 1])
+            break
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
     try:
         from django.core.management import execute_from_command_line
