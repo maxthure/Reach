@@ -11,6 +11,7 @@ def main():
         param = sys.argv[c]
         if param == "--cwd":
             os.chdir(sys.argv[c + 1])
+            c = c + 1
         else:
             params.append(param)
     print(params)
