@@ -36,10 +36,14 @@ def test_issue(request, project_id, issue_id):
 
 
 def populate(request):
-    i = ProjectIssue()
-    i.issue_id_id = 'b6a932fa34a5443d9e4a438255186b27'
-    i.project_id_id = 'f92298adfd27492eabc091a69b9a4627'
-    i.save()
+    try:
+        i = ProjectIssue()
+        i.issue_id_id = 'b6a932fa34a5443d9e4a438255186b27'
+        i.project_id_id = 'f92298adfd27492eabc091a69b9a4627'
+        i.save()
+        HttpResponse("Success")
+    except Exception:
+        HttpResponse("Failed")
 
 
 # with database queries
