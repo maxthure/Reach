@@ -9,6 +9,7 @@ function Project() {
     const [ name, setName ] = useState("");
     const [ desciption, setDescription ] = useState("");
     const [ createdAt, setCreatedAt ] = useState("");
+    const [ info, setInfo ] = useState("")
 
     const fetchProject = async (projectId) => {
         fetch(backendUrl + "/project/" + projectId)
@@ -17,7 +18,8 @@ function Project() {
                 setIssues(json.issues);
                 setName(json.name);
                 setDescription(json.description);
-                setCreatedAt(json.created_at)
+                setCreatedAt(json.created_at);
+                setInfo(json.info)
             })
     }
 
@@ -37,7 +39,8 @@ function Project() {
                 <h1>{ name }</h1>
                 <Link to="documentation">Documentation</Link> <br/><br/>
                 { createdAt } <br /> <br />
-                { desciption }<br/>
+                Description: { desciption } <br/>
+                Info: { info } <br/>
                 Issues: <br/>
 
                 <div>

@@ -2,7 +2,7 @@ import json
 import os
 
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse
+from django.http import HttpResponse, QueryDict
 from projects.models import Project, Measurement, Issue, ProjectIssue
 
 database = './db.sqlite3'
@@ -124,3 +124,12 @@ def update_documentation(request, project_id):
         return HttpResponse("Failed")
 
     return HttpResponse("Success")
+
+
+def new_project(request):
+    project_data = QueryDict(request.readline().decode('utf-8'))
+    new_proj = Project()
+    new_proj.name = project_data['project-name']
+    new_proj.info = project_data['project-info']
+    new_proj.save()
+    return HttpResponse("<html><head><meta http-equiv='refresh' content='1; url=http://localhost:3000' /></head><body>Success <br /><br />2 Second until redirected ...</body></html>")
