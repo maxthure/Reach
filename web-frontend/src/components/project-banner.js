@@ -10,7 +10,8 @@ class ProjectBanner extends React.Component {
         return (
             <div className={"project"}>
                 <b>Project Name:</b> <br /> { this.props.name } <br />
-                <b>Project Description:</b> <br /> { this.props.description } <br />
+                <b>Project Description:</b> <br /> { this.props.info } <br />
+                { this.props.createdAt }<br /> <br />
                 <Link to={ url } className={"project-link"}>Go to Project</Link>
             </div>
         );

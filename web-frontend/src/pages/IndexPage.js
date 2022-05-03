@@ -18,7 +18,8 @@ class ProjectList extends React.Component {
     addProject(project) {
         this.state.projectList.push({
             name: project.name,
-            description: project.description,
+            info: project.info,
+            created_at: project.created_at,
             id: project.id
         })
         this.forceUpdate()
@@ -29,13 +30,21 @@ class ProjectList extends React.Component {
     }
 
     fetchProjects = async () => {
-        await fetch(backendUrl + '/testprojects/project1')
+        await fetch(backendUrl + '/index')
             .then(response => response.json())
             .then(json => {
-                for (let p of json.recent_projects) {
+                for (let p of json) {
                     this.addProject(p);
                 }
             })
+    }
+
+    prettifyDate = (uglyDate) => {
+        let date = uglyDate.substr(0, 10);
+        let year = date.substr(0, 4);
+        let month = date.substr(5, 2);
+        let day = date.substr(8, 2);
+        return day + "." + month + "." + year;
     }
 
     render() {
@@ -44,9 +53,10 @@ class ProjectList extends React.Component {
                 { this.state.projectList.map(p =>
                     <ProjectBanner
                         name={p.name}
-                        description={p.description}
+                        info={p.info}
                         projectId={p.id}
                         key={p.id}
+                        createdAt={this.prettifyDate(p.created_at)}
                     />
                 )}
             </div>

@@ -6,16 +6,18 @@ import { backendUrl } from "../config";
 function Project() {
 
     const [ issues, setIssues ] = useState([]);
+    const [ name, setName ] = useState("");
+    const [ desciption, setDescription ] = useState("");
+    const [ createdAt, setCreatedAt ] = useState("");
 
     const fetchProject = async (projectId) => {
-        fetch(backendUrl + "/testprojects/project" + projectId)
+        fetch(backendUrl + "/project/" + projectId)
             .then(response => response.json())
             .then(json => {
-                for (let p of json.recent_projects) {
-                    if (p.id === projectId) {
-                        setIssues(p.issues);
-                    }
-                }
+                setIssues(json.issues);
+                setName(json.name);
+                setDescription(json.description);
+                setCreatedAt(json.created_at)
             })
     }
 
@@ -32,9 +34,10 @@ function Project() {
                     <button>Export Template</button>
                 </Link><br/><br/>
 
-                <h1>LTE-Advanced</h1>
+                <h1>{ name }</h1>
                 <Link to="documentation">Documentation</Link> <br/><br/>
-                Info: The measurement of the LTE-Advanced Standard <br/>
+                { createdAt } <br /> <br />
+                { desciption }<br/>
                 Issues: <br/>
 
                 <div>

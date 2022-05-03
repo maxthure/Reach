@@ -34,6 +34,5 @@ urlpatterns = [
     path('project/<str:project_id>/update-doc/', update_documentation),
     path('project/<str:project_id>/get-doc/', get_documentation_text),
     path('issue/<str:project_id>/<str:issue_id>/', issue),
-    path('docu/<str:project_id>/', documentation),
-    path('all-projects', get_all_projects)
+    path('docu/<str:project_id>/', documentation)
 ]
