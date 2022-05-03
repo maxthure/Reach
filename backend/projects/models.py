@@ -11,8 +11,12 @@ class Project(models.Model):
     created_at = models.DateTimeField(default=datetime.now, blank=True)
     # Short info about the project
     info = models.CharField(max_length=500, default="")
-    # Path to description file
-    description = models.CharField(max_length=500, default="")
+    # Exhaustive description of the project
+    description = models.CharField(max_length=5000, default="")
+    # Analysis of the measurements
+    analysis = models.CharField(max_length=5000, default="")
+    # Evaluation of the project
+    evaluation = models.CharField(max_length=5000, default="")
     # Path to documentation file
     documentation = models.CharField(max_length=5000, default="")
 
@@ -24,8 +28,8 @@ class Issue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=200)
     created_at = models.DateTimeField(default=datetime.now, blank=True)
-    # path to description file
-    description = models.CharField(max_length=500)
+    # Description of the issue
+    description = models.CharField(max_length=5000)
 
     def __str__(self):
         return self.name

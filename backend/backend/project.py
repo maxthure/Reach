@@ -3,6 +3,7 @@ import os
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, QueryDict
+from django.conf import settings
 from projects.models import Project, Measurement, Issue, ProjectIssue
 
 database = './db.sqlite3'
@@ -54,7 +55,8 @@ def index(request):
     for project in all_projects:
         dictionary = {"id": str(project.id), "name": project.name, "description": project.description,
                       "created_at": str(project.created_at), "info": project.info,
-                      "documentation": project.documentation}
+                      "documentation": project.documentation, "analysis": project.analysis,
+                      "evaluation": project.evaluation}
         projects.append(dictionary)
 
     #TODO hier fehlt noch die Unterteilung in Recent und All Projects abgestimmt auf den User
@@ -81,23 +83,13 @@ def project(request, project_id):
 
     dictionary = {"id": str(proj.id), "name": proj.name, "description": proj.description,
                   "created_at": str(proj.created_at), "info": proj.info,
-                  "documentation": proj.documentation, "measurements": meas, "issues":iss}
+                  "documentation": proj.documentation, "analysis": proj.analysis,
+                      "evaluation": proj.evaluation, "measurements": meas, "issues":iss}
 
     #TODO hier fehlen noch die User und deren Rolle
 
     f = json.dumps(dictionary)
     return HttpResponse(f)
-
-
-def documentation(request, project_id):
-
-    #TODO case handeln, dass es noch keine Doku gibt bzw. eigentlich sollte die Doku immer on-demand erstellt werden, damit sie immer aktuell ist
-
-    proj = Project.objects.get(id=project_id)
-    with open(os.getcwd() + proj.documentation, 'rb') as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline;filename=documentation.pdf'
-        return response
 
 
 def issue(request, project_id, issue_id):
@@ -107,18 +99,67 @@ def issue(request, project_id, issue_id):
     return HttpResponse(f)
 
 
-def get_documentation_text(request, project_id):
+def get_documentation(request, project_id):
     try:
         p = Project.objects.get(id=project_id)
-        return HttpResponse(p.documentation)
+        description = p.description
+        analysis = p.analysis
+        evaluation = p.evaluation
+        return HttpResponse(description+"<br /><br />"+analysis+"<br /><br />"+evaluation)
     except ValidationError:
         return HttpResponse("")
 
 
-def update_documentation(request, project_id):
+def get_description(request, project_id):
     try:
         p = Project.objects.get(id=project_id)
-        p.documentation = request.read().decode('utf-8')
+        return HttpResponse(p.description)
+    except ValidationError:
+        return HttpResponse("")
+
+
+def get_analysis(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        return HttpResponse(p.analysis)
+    except ValidationError:
+        return HttpResponse("")
+
+
+def get_evaluation(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        return HttpResponse(p.evaluation)
+    except ValidationError:
+        return HttpResponse("")
+
+
+def update_description(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        p.description = request.read().decode('utf-8')
+        p.save()
+    except ValidationError:
+        return HttpResponse("Failed")
+
+    return HttpResponse("Success")
+
+
+def update_analysis(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        p.analysis = request.read().decode('utf-8')
+        p.save()
+    except ValidationError:
+        return HttpResponse("Failed")
+
+    return HttpResponse("Success")
+
+
+def update_evaluation(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        p.evaluation = request.read().decode('utf-8')
         p.save()
     except ValidationError:
         return HttpResponse("Failed")
