@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .project import test_projects, test_index, test_documentation, test_issue, populate
-from .project import index, project, issue, documentation, update_documentation
+from .project import index, project, issue, documentation, update_documentation, get_documentation_text
 from .doorman.doorman import get_all_projects
 
 
@@ -32,6 +32,7 @@ urlpatterns = [
     path('index/', index),
     path('project/<str:project_id>/', project),
     path('project/<str:project_id>/update-doc/', update_documentation),
+    path('project/<str:project_id>/get-doc/', get_documentation_text),
     path('issue/<str:project_id>/<str:issue_id>/', issue),
     path('docu/<str:project_id>/', documentation),
     path('all-projects', get_all_projects)
