@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.conf import settings
 import uuid
@@ -6,13 +8,13 @@ import uuid
 class Project(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
-    #short info about the project
-    info = models.CharField(max_length=500)
-    #path to description file
-    description = models.CharField(max_length=500)
-    #path to documentation file
-    documentation = models.CharField(max_length=5000)
+    created_at = models.DateTimeField(default=datetime.now, blank=True)
+    # Short info about the project
+    info = models.CharField(max_length=500, default="")
+    # Path to description file
+    description = models.CharField(max_length=500, default="")
+    # Path to documentation file
+    documentation = models.CharField(max_length=5000, default="")
 
     def __str__(self):
         return self.name
@@ -21,7 +23,7 @@ class Project(models.Model):
 class Issue(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     name = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=datetime.now, blank=True)
     # path to description file
     description = models.CharField(max_length=500)
 
@@ -37,7 +39,7 @@ class Measurement(models.Model):
     setup_path = models.CharField(max_length=300)
     # path to screenshot file
     raw_data_path = models.CharField(max_length=300)
-    date_time = models.DateTimeField(auto_now_add=True)
+    date_time = models.DateTimeField(default=datetime.now, blank=True)
     temperature = models.IntegerField()
 
     def __str__(self):
@@ -57,8 +59,8 @@ class ProjectIssue(models.Model):
 class ProjectUser(models.Model):
     project_id = models.ForeignKey('Project', on_delete=models.PROTECT)
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    access_level = models.IntegerField()
-    last_access = models.DateTimeField(auto_now_add=True)
+    access_level = models.IntegerField(default=0)
+    last_access = models.DateTimeField(default=datetime.now, blank=True)
 
 
 class IssueUser(models.Model):

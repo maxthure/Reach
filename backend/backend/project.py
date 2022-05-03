@@ -1,5 +1,7 @@
 import json
 import os
+
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from projects.models import Project, Measurement, Issue, ProjectIssue
 
@@ -100,3 +102,14 @@ def issue(request, project_id, issue_id):
     f = json.dumps(dic)
     return HttpResponse(f)
 
+
+def update_documentation(request, project_id):
+
+    try:
+        p = Project.objects.get(id=project_id)
+        p.documentation = request.read().decode('utf-8')
+        p.save()
+    except ValidationError:
+        return HttpResponse("Failed")
+
+    return HttpResponse("Success")
