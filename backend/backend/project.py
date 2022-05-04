@@ -74,14 +74,14 @@ def project(request, project_id):
     proj = Project.objects.get(id=project_id)
     measurements = Measurement.objects.filter(projectmeasurement__project_id_id=project_id)
     issues = Issue.objects.filter(projectissue__project_id_id=project_id)
-    users = User.objects.filter(projectuser__project_id_id=project_id)
+    proj_users = ProjectUser.objects.filter(project_id_id=project_id)
 
     meas = []
-    for m in measurements:
-        dic = {"id": str(m.id), "screenshot_path": m.screenshot_path, "setup_path": m.setup_path,
-               "raw_data_path": m.raw_data_path, "temperature": m.temperature, "date_time": str(m.date_time),
-               "analysis": m.analysis, "description": m.description, "evaluation": m.evaluation}
-        meas.append(dic)
+#    for m in measurements:
+#        dic = {"id": str(m.id), "screenshot_path": m.screenshot_path, "setup_path": m.setup_path,
+#               "raw_data_path": m.raw_data_path, "temperature": m.temperature, "date_time": str(m.date_time),
+#               "analysis": m.analysis, "description": m.description, "evaluation": m.evaluation}
+#        meas.append(dic)
 
     iss = []
     for i in issues:
@@ -91,21 +91,20 @@ def project(request, project_id):
     owners = []
     collaborators = []
     viewers = []
-#    for u in users:
-#        if u.access_level == '2':
-#            owners.append(u.first_name+" "+u.last_name)
-#        elif u.access_level == '1':
-#            collaborators.append(u.first_name+" "+u.last_name)
-#        elif u.access_level == '0':
-#            viewers.append(u.first_name+" "+u.last_name)
+    for u in proj_users:
+        user = User.objects.get(id=u.user_id_id)
+        if u.access_level == 2:
+            owners.append(user.first_name+" "+user.last_name)
+        elif u.access_level == 1:
+            collaborators.append(user.first_name+" "+user.last_name)
+        elif u.access_level == 0:
+            viewers.append(user.first_name+" "+user.last_name)
 
     dictionary = {"id": str(proj.id), "name": proj.name, "description": proj.description,
                   "created_at": str(proj.created_at), "info": proj.info,
                   "documentation": proj.documentation, "analysis": proj.analysis,
                   "evaluation": proj.evaluation, "measurements": meas, "issues":iss, "owners": owners,
                   "collaborators": collaborators, "viewers": viewers}
-
-    #TODO hier fehlen noch die User und deren Rolle
 
     f = json.dumps(dictionary)
     return HttpResponse(f)
