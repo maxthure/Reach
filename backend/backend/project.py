@@ -76,12 +76,14 @@ def project(request, project_id):
     issues = Issue.objects.filter(projectissue__project_id_id=project_id)
     proj_users = ProjectUser.objects.filter(project_id_id=project_id)
 
+    print(measurements)
+
     meas = []
-#    for m in measurements:
-#        dic = {"id": str(m.id), "screenshot_path": m.screenshot_path, "setup_path": m.setup_path,
-#               "raw_data_path": m.raw_data_path, "temperature": m.temperature, "date_time": str(m.date_time),
-#               "analysis": m.analysis, "description": m.description, "evaluation": m.evaluation}
-#        meas.append(dic)
+    for m in measurements:
+        dic = {"id": str(m.id), "screenshot_path": m.screenshot_path, "setup_path": m.setup_path,
+               "raw_data_path": m.raw_data_path, "temperature": m.temperature, "date_time": str(m.date_time),
+               "analysis": m.analysis, "description": m.description, "evaluation": m.evaluation}
+        meas.append(dic)
 
     iss = []
     for i in issues:
@@ -154,6 +156,19 @@ def get_evaluation(request, project_id):
         return HttpResponse("")
 
 
+def get_measurement(request, measurement_id):
+    try:
+        m = Measurement.objects.get(id=measurement_id)
+        response = {
+            "description": m.description,
+            "analysis": m.analysis,
+            "evaluation": m.evaluation
+        }
+        return HttpResponse(json.dumps(response))
+    except ValidationError:
+        return HttpResponse("")
+
+
 # Updates:
 #  - Description
 #  - Analysis
@@ -201,6 +216,22 @@ def update_evaluation(request, project_id):
         p = Project.objects.get(id=project_id)
         p.evaluation = request.read().decode('utf-8')
         p.save()
+    except ValidationError:
+        return HttpResponse("Failed")
+
+    return HttpResponse("Success")
+
+
+def update_measurement(request, measurement_id):
+    req_data = request.read().decode('utf-8')
+    data = json.loads(req_data)
+
+    try:
+        m = Measurement.objects.get(id=measurement_id)
+        m.description = data["description"]
+        m.analysis = data["analysis"]
+        m.evaluation = data["evaluation"]
+        m.save()
     except ValidationError:
         return HttpResponse("Failed")
 
