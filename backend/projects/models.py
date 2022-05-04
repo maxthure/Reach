@@ -45,6 +45,12 @@ class Measurement(models.Model):
     raw_data_path = models.CharField(max_length=300)
     date_time = models.DateTimeField(default=datetime.now, blank=True)
     temperature = models.IntegerField()
+    # Exhaustive description of this specific measurement
+    description = models.CharField(max_length=5000, default="")
+    # Analysis of this specific measurements
+    analysis = models.CharField(max_length=5000, default="")
+    # Evaluation of this specific measurement
+    evaluation = models.CharField(max_length=5000, default="")
 
     def __str__(self):
         return self.screenshot_path + " (" + str(self.date_time) + ")"

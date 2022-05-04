@@ -38,10 +38,14 @@ def test_issue(request, project_id, issue_id):
 
 def populate(request):
     try:
-        i = ProjectUser()
-        i.user_id_id = '6'
-        i.project_id_id = 'db43838eb2e645babdce85a5a727eeb9'
-        i.access_level = '0'
+        i = Measurement()
+        i.screenshot_path = '/data/projects/1/measurements/1/screenshots'
+        i.setup_path = '/data/projects/1/measurements/1/setups'
+        i.raw_data_path = '/data/projects/1/measurements/1/meas_data'
+        i.temperature = '21'
+        i.description = 'Lorem ipsum'
+        i.analysis = 'Lorem ipsum'
+        i.evaluation = 'Lorem ipsum'
         i.save()
         HttpResponse("Success")
     except Exception:
@@ -75,7 +79,8 @@ def project(request, project_id):
     meas = []
     for m in measurements:
         dic = {"id": str(m.id), "screenshot_path": m.screenshot_path, "setup_path": m.setup_path,
-               "raw_data_path": m.raw_data_path, "temperature": m.temperature, "date_time": str(m.date_time)}
+               "raw_data_path": m.raw_data_path, "temperature": m.temperature, "date_time": str(m.date_time),
+               "analysis": m.analysis, "description": m.description, "evaluation": m.evaluation}
         meas.append(dic)
 
     iss = []
