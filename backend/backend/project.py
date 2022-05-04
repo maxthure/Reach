@@ -3,8 +3,8 @@ import os
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, QueryDict
-from django.conf import settings
-from projects.models import Project, Measurement, Issue, ProjectIssue
+from django.contrib.auth.models import User
+from projects.models import Project, Measurement, Issue, ProjectIssue, ProjectUser
 
 database = './db.sqlite3'
 
@@ -38,9 +38,10 @@ def test_issue(request, project_id, issue_id):
 
 def populate(request):
     try:
-        i = ProjectIssue()
-        i.issue_id_id = 'b6a932fa34a5443d9e4a438255186b27'
-        i.project_id_id = 'f92298adfd27492eabc091a69b9a4627'
+        i = ProjectUser()
+        i.user_id_id = '6'
+        i.project_id_id = 'db43838eb2e645babdce85a5a727eeb9'
+        i.access_level = '0'
         i.save()
         HttpResponse("Success")
     except Exception:
@@ -69,6 +70,7 @@ def project(request, project_id):
     proj = Project.objects.get(id=project_id)
     measurements = Measurement.objects.filter(projectmeasurement__project_id_id=project_id)
     issues = Issue.objects.filter(projectissue__project_id_id=project_id)
+    users = User.objects.filter(projectuser__project_id_id=project_id)
 
     meas = []
     for m in measurements:
@@ -81,10 +83,22 @@ def project(request, project_id):
         dic = {"id": str(i.id), "name": i.name, "description": i.description, "created_at": str(i.created_at)}
         iss.append(dic)
 
+    owners = []
+    collaborators = []
+    viewers = []
+#    for u in users:
+#        if u.access_level == '2':
+#            owners.append(u.first_name+" "+u.last_name)
+#        elif u.access_level == '1':
+#            collaborators.append(u.first_name+" "+u.last_name)
+#        elif u.access_level == '0':
+#            viewers.append(u.first_name+" "+u.last_name)
+
     dictionary = {"id": str(proj.id), "name": proj.name, "description": proj.description,
                   "created_at": str(proj.created_at), "info": proj.info,
                   "documentation": proj.documentation, "analysis": proj.analysis,
-                      "evaluation": proj.evaluation, "measurements": meas, "issues":iss}
+                  "evaluation": proj.evaluation, "measurements": meas, "issues":iss, "owners": owners,
+                  "collaborators": collaborators, "viewers": viewers}
 
     #TODO hier fehlen noch die User und deren Rolle
 
