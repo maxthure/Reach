@@ -102,10 +102,12 @@ def issue(request, project_id, issue_id):
 def get_documentation(request, project_id):
     try:
         p = Project.objects.get(id=project_id)
-        description = p.description
-        analysis = p.analysis
-        evaluation = p.evaluation
-        return HttpResponse(description+"<br /><br />"+analysis+"<br /><br />"+evaluation)
+        response = {
+            "description": p.description,
+            "analysis": p.analysis,
+            "evaluation": p.evaluation
+        }
+        return HttpResponse(json.dumps(response))
     except ValidationError:
         return HttpResponse("")
 
@@ -132,6 +134,26 @@ def get_evaluation(request, project_id):
         return HttpResponse(p.evaluation)
     except ValidationError:
         return HttpResponse("")
+
+
+# Updates:
+#  - Description
+#  - Analysis
+#  - Evaluation
+def update_documentation(request, project_id):
+    req_data = request.read().decode('utf-8')
+    data = json.loads(req_data)
+
+    try:
+        p = Project.objects.get(id=project_id)
+        p.description = data["description"]
+        p.analysis = data["analysis"]
+        p.evaluation = data["evaluation"]
+        p.save()
+    except ValidationError:
+        return HttpResponse("Failed")
+
+    return HttpResponse("Success")
 
 
 def update_description(request, project_id):

@@ -6,30 +6,39 @@ import "../assets/css/elements.css"
 import { backendUrl } from "../config";
 import {Link, useParams} from "react-router-dom";
 import MdEditor from "for-editor";
+import {clear} from "@testing-library/user-event/dist/clear";
 
 function OnlineCollaboration() {
 
     let {projectId} = useParams();
     let url = "/projects/project_" + projectId;
 
-    const [ mdText, setMdText ] = useState("");
+    const [ description, setDescription ] = useState("");
+    const [ experiment, setExperiment ] = useState("");
+    const [ analysis, setAnalysis ] = useState("");
     const [ syncedWithServer, setSyncedWithServer ] = useState(false);
     const [ unsavedChanges, setUnsavedChanges ] = useState(false);
 
-    let sendDocumentationToServer = (docText) => {
+    let sendDocumentationToServer = () => {
+        let data = "{\"description\": \"" + description + "\",\"analysis\": \"" + experiment + "\",\"evaluation\": \"" + analysis + "\"}";
         fetch(
-            backendUrl + "/project/" + projectId + "/update-doc/",
+            backendUrl + "/project/" + projectId + "/update-doc",
             {
                 method: "POST",
                 headers: {'Content-Type': 'text/plain'},
-                body: docText
+                body: data
             });
     }
 
     let getDocumentationFromServer = () => {
-        fetch(backendUrl + "/project/" + projectId + "/get-doc/")
-            .then((response) => response.text())
-            .then((text => setMdText(text)));
+        let clearProjectId = projectId.replace(/-/g, "");
+        fetch(backendUrl + "/project/" + clearProjectId + "/get-doc/")
+            .then((response) => response.json())
+            .then(json => {
+                setDescription(json.description);
+                setExperiment(json.analysis);
+                setAnalysis(json.evaluation);
+            });
     }
 
     if (!syncedWithServer) {
@@ -37,14 +46,24 @@ function OnlineCollaboration() {
         setSyncedWithServer(true);
     }
 
-    let handleChange = (newValue) => {
-        setMdText(newValue);
+    let handleChangeDescription = (newValue) => {
+        setDescription(newValue);
         setUnsavedChanges(true);
     }
 
-    let saveChanges = () => {
-        sendDocumentationToServer(mdText);
-        setMdText(mdText);
+    let handleChangeExperiment = (newValue) => {
+        setExperiment(newValue);
+        setUnsavedChanges(true);
+    }
+
+    let handleChangeAnalysis = (newValue) => {
+        setAnalysis(newValue);
+        setUnsavedChanges(true);
+    }
+
+    let save = () => {
+        sendDocumentationToServer();
+        setDescription(description);
         setUnsavedChanges(false);
     }
 
@@ -70,11 +89,26 @@ function OnlineCollaboration() {
                     { statusOfUnsavedChanges() }
                 </div>
                 <div id="documentation-body">
+                    <h1>Description</h1>
                     <MdEditor
-                        value={mdText}
+                        value={description}
                         language={"en"}
-                        onChange={(val) => handleChange(val)}
-                        onSave={() => saveChanges()}
+                        onChange={(val) => handleChangeDescription(val)}
+                        onSave={() => save()}
+                    />
+                    <h1>Experiment</h1>
+                    <MdEditor
+                        value={experiment}
+                        language={"en"}
+                        onChange={(val) => handleChangeExperiment(val)}
+                        onSave={() => save()}
+                    />
+                    <h1>Evaluation</h1>
+                    <MdEditor
+                        value={analysis}
+                        language={"en"}
+                        onChange={(val) => handleChangeAnalysis(val)}
+                        onSave={() => save()}
                     />
                 </div>
             </div>

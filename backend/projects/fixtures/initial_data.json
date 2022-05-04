@@ -1,0 +1,46 @@
+[
+
+  {
+    "model": "projects.Project",
+    "pk": 1,
+    "fields": {
+      "name": "LTE-Advanced",
+      "description": "Description of the LTE-Advanced...",
+      "info": "Measuring new LTE-Advanced standard"
+    }
+  },
+  {
+    "model": "projects.Issue",
+    "pk": 2,
+    "fields": {
+        "name": "Issue 1",
+        "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+        "id": "1bfb633618f643c497d24ec7e2af60b7"
+    }
+  },
+  {
+    "model": "projects.Issue",
+    "pk": 3,
+    "fields": {
+        "name": "Issue 2",
+        "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
+        "id": "644695dde4f34233bddbb4ad231ff29c"
+    }
+  },
+  {
+    "model": "projects.ProjectIssue",
+    "pk": 4,
+    "fields": {
+      "issue_id_id": "1bfb633618f643c497d24ec7e2af60b7",
+      "project_id_id": "00000000000000000000000000000001"
+    }
+  },
+  {
+    "model": "projects.ProjectIssue",
+    "pk": 5,
+    "fields": {
+      "issue_id_id": "644695dde4f34233bddbb4ad231ff29c",
+      "project_id_id": "00000000000000000000000000000001"
+    }
+  }
+]
