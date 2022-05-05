@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponse, QueryDict
 from django.contrib.auth.models import User
 from projects.models import Project, Measurement, Issue, ProjectIssue, ProjectUser
+from glob import glob
 
 database = './db.sqlite3'
 
@@ -76,8 +77,6 @@ def project(request, project_id):
     issues = Issue.objects.filter(projectissue__project_id_id=project_id)
     proj_users = ProjectUser.objects.filter(project_id_id=project_id)
 
-    print(measurements)
-
     meas = []
     for m in measurements:
         dic = {"id": str(m.id), "screenshot_path": m.screenshot_path, "setup_path": m.setup_path,
@@ -120,12 +119,28 @@ def issue(request, project_id, issue_id):
 
 
 def get_documentation(request, project_id):
+    measurements = Measurement.objects.filter(projectmeasurement__project_id_id=project_id)
+
+    meas = []
+    for m in measurements:
+        screenshots = []
+        print(m)
+        for sc in glob('.'+m.screenshot_path+'/*'):
+            screenshots.append(sc)
+
+        dic = {"id": str(m.id), "screenshot_path": m.screenshot_path, "setup_path": m.setup_path,
+               "raw_data_path": m.raw_data_path, "temperature": m.temperature, "date_time": str(m.date_time),
+               "analysis": m.analysis, "description": m.description, "evaluation": m.evaluation,
+               "screenshots": screenshots}
+        meas.append(dic)
+
     try:
         p = Project.objects.get(id=project_id)
         response = {
             "description": p.description,
             "analysis": p.analysis,
-            "evaluation": p.evaluation
+            "evaluation": p.evaluation,
+            "measurements": dic
         }
         return HttpResponse(json.dumps(response))
     except ValidationError:
