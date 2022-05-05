@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import Navigation from "../components/navigation";
 import {Link, useParams} from "react-router-dom";
 import { backendUrl } from "../config";
+import {Button} from "@mui/material";
 
 function Project() {
 
@@ -33,11 +34,16 @@ function Project() {
             </header>
             <div>
                 <Link to="/templates">
-                    <button>Export Template</button>
+                    <Button>Export Template</Button>
                 </Link><br/><br/>
 
                 <h1>{ name }</h1>
-                <Link to="documentation">Documentation</Link> <br/><br/>
+                <Link to="documentation"><Button>Documentation</Button></Link> <br/><br/>
+                <Link to="edit-description"><Button>Edit Description</Button></Link>
+                <Link to="edit-experiment"><Button>Edit Experiment Setup</Button></Link>
+                <Link to="edit-evaluation"><Button>Edit Evaluation</Button></Link>
+                <br />
+                <br />
                 { createdAt } <br /> <br />
                 Description: { desciption } <br/>
                 Info: { info } <br/>
