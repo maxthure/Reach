@@ -37,22 +37,6 @@ def test_issue(request, project_id, issue_id):
     return HttpResponse(f)
 
 
-def populate(request):
-    try:
-        i = Measurement()
-        i.screenshot_path = '/data/projects/1/measurements/1/screenshots'
-        i.setup_path = '/data/projects/1/measurements/1/setups'
-        i.raw_data_path = '/data/projects/1/measurements/1/meas_data'
-        i.temperature = '21'
-        i.description = 'Lorem ipsum'
-        i.analysis = 'Lorem ipsum'
-        i.evaluation = 'Lorem ipsum'
-        i.save()
-        HttpResponse("Success")
-    except Exception:
-        HttpResponse("Failed")
-
-
 # with database queries
 def index(request):
     all_projects = Project.objects.all()
@@ -112,8 +96,17 @@ def project(request, project_id):
 
 
 def issue(request, project_id, issue_id):
+    proj_users = ProjectUser.objects.filter(project_id_id=project_id)
+
+    users = []
+    for u in proj_users:
+        user = User.objects.get(id=u.user_id_id)
+        if u.access_level == 2 or u.access_level == 1:
+            users.append({"id": user.id, "first_name": user.first_name, "last_name": user.last_name})
+
     i = Issue.objects.filter(projectissue__project_id_id=project_id).get(id=issue_id)
-    dic = {"id": str(i.id), "name": i.name, "description": i.description, "created_at": str(i.created_at)}
+    dic = {"id": str(i.id), "name": i.name, "description": i.description, "created_at": str(i.created_at),
+           "possible_assignees": users}
     f = json.dumps(dic)
     return HttpResponse(f)
 
@@ -251,6 +244,19 @@ def update_measurement(request, measurement_id):
         return HttpResponse("Failed")
 
     return HttpResponse("Success")
+
+
+def get_users(request):
+    all_users = User.objects.all()
+    users = []
+
+    for user in all_users:
+        dictionary = {"id": str(user.id), "last_login": user.last_login, "username": user.username,
+                      "email": user.email, "last_name": user.last_name, "first_name": user.first_name}
+        users.append(dictionary)
+
+    f = json.dumps(users)
+    return HttpResponse(f)
 
 
 def new_project(request):
