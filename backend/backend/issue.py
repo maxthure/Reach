@@ -2,7 +2,7 @@ import json
 
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from projects.models import Issue, ProjectUser
+from projects.models import Issue, ProjectUser, IssueUser
 
 
 # returns a specific issue for the detailed project view
@@ -20,3 +20,18 @@ def issue(request, project_id, issue_id):
            "possible_assignees": users}
     f = json.dumps(dic)
     return HttpResponse(f)
+
+
+def assign_users(request, issue_id):
+    req_data = request.read().decode('utf-8')
+    data = json.loads(req_data)
+
+    for user in data:
+        iu = IssueUser()
+        iu.issue_id_id = issue_id
+        iu.user_id_id = user
+        iu.save()
+
+    # TODO keine Ahnung, was man hier zurückgeben soll
+
+    return HttpResponse("Success")
