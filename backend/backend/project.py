@@ -130,7 +130,6 @@ def get_documentation(request, project_id):
     meas = []
     for m in measurements:
         screenshots = []
-        print(m)
         for sc in glob('.'+m.screenshot_path+'/*'):
             screenshots.append(sc)
 
