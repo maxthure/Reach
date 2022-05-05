@@ -15,32 +15,36 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .project import test_projects, test_index, test_documentation, test_issue
-from .project import index, new_project, project, issue, get_documentation, get_description, get_analysis, \
-    get_evaluation, update_documentation, get_measurement, update_measurement
-from .doorman.doorman import get_all_projects
-
+from .project import index, project, get_description, update_description, get_analysis, update_analysis, get_evaluation, update_evaluation, get_documentation, update_documentation, new_project
+from .issue import issue
+from .measurement import get_measurement, update_measurement
+from .user import get_users
+from .testing import test_projects, test_index, test_documentation, test_issue
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('testindex/', test_index),
-    path('testprojects/<str:project_id>', test_projects),
-    path('testdocu/<str:project_id>', test_documentation),
-    path('testissue/<str:project_id>/<str:issue_id>', test_issue),
-
     path('index/', index),
-    path('new-project/', new_project),
-
     path('project/<str:project_id>/', project),
-    path('project/<str:project_id>/get-doc/', get_documentation),
     path('project/<str:project_id>/get-desc/', get_description),
+    path('project/<str:project_id>/update-desc/', update_description),
     path('project/<str:project_id>/get-ana/', get_analysis),
+    path('project/<str:project_id>/update-ana/', update_analysis),
     path('project/<str:project_id>/get-eval/', get_evaluation),
+    path('project/<str:project_id>/update-eval/', update_evaluation),
+    path('project/<str:project_id>/get-doc/', get_documentation),
     path('project/<str:project_id>/update-doc', update_documentation),
+    path('new-project/', new_project),
 
     path('issue/<str:project_id>/<str:issue_id>/', issue),
 
     path('measurement/<str:measurement_id>/get-meas/', get_measurement),
     path('measurement/<str:measurement_id>/update-meas/', update_measurement),
+
+    path('user/get-users/', get_users),
+
+    path('testindex/', test_index),
+    path('testprojects/<str:project_id>/', test_projects),
+    path('testdocu/<str:project_id>/', test_documentation),
+    path('testissue/<str:project_id>/<str:issue_id>/', test_issue),
 ]

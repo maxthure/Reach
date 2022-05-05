@@ -1,43 +1,13 @@
 import json
-import os
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, QueryDict
 from django.contrib.auth.models import User
-from projects.models import Project, Measurement, Issue, ProjectIssue, ProjectUser
+from projects.models import Project, Measurement, Issue, ProjectUser
 from glob import glob
 
-database = './db.sqlite3'
 
-
-# for testing and development only
-def test_index(request):
-    f = open(os.getcwd() + '/data/Index.json')
-    return HttpResponse(f)
-
-
-def test_projects(request, project_id):
-    f = open(os.getcwd() + '/data/projects/' + project_id + '/Project.json')
-    data = json.load(f)
-    with open(os.getcwd() + '/data/projects/'+project_id+'/texts/description.txt', 'r') as desc:
-        data["description"] = desc.read()
-    res = json.dumps(data)
-    return HttpResponse(res)
-
-
-def test_documentation(request, project_id):
-    with open(os.getcwd() + '/data/projects/' + project_id + '/CPMS.pdf', 'rb') as pdf:
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline;filename=documentation.pdf'
-        return response
-
-
-def test_issue(request, project_id, issue_id):
-    f = open(os.getcwd() + '/data/projects/' + project_id + '/issues/Issue' + issue_id + '.json')
-    return HttpResponse(f)
-
-
-# with database queries
+# returns all projects to generate a project overview
 def index(request):
     all_projects = Project.objects.all()
     projects = []
@@ -49,12 +19,13 @@ def index(request):
                       "evaluation": project.evaluation}
         projects.append(dictionary)
 
-    #TODO hier fehlt noch die Unterteilung in Recent und All Projects abgestimmt auf den User
+    # TODO hier fehlt noch die Unterteilung in Recent und All Projects abgestimmt auf den User
 
     f = json.dumps(projects)
     return HttpResponse(f)
 
 
+# returns a specific project for the detailed project view
 def project(request, project_id):
     proj = Project.objects.get(id=project_id)
     measurements = Measurement.objects.filter(projectmeasurement__project_id_id=project_id)
@@ -95,22 +66,64 @@ def project(request, project_id):
     return HttpResponse(f)
 
 
-def issue(request, project_id, issue_id):
-    proj_users = ProjectUser.objects.filter(project_id_id=project_id)
-
-    users = []
-    for u in proj_users:
-        user = User.objects.get(id=u.user_id_id)
-        if u.access_level == 2 or u.access_level == 1:
-            users.append({"id": user.id, "first_name": user.first_name, "last_name": user.last_name})
-
-    i = Issue.objects.filter(projectissue__project_id_id=project_id).get(id=issue_id)
-    dic = {"id": str(i.id), "name": i.name, "description": i.description, "created_at": str(i.created_at),
-           "possible_assignees": users}
-    f = json.dumps(dic)
-    return HttpResponse(f)
+def get_description(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        return HttpResponse(p.description)
+    except ValidationError:
+        return HttpResponse("")
 
 
+def update_description(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        p.description = request.read().decode('utf-8')
+        p.save()
+    except ValidationError:
+        return HttpResponse("Failed")
+
+    return HttpResponse("Success")
+
+
+def get_analysis(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        return HttpResponse(p.analysis)
+    except ValidationError:
+        return HttpResponse("")
+
+
+def update_analysis(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        p.analysis = request.read().decode('utf-8')
+        p.save()
+    except ValidationError:
+        return HttpResponse("Failed")
+
+    return HttpResponse("Success")
+
+
+def get_evaluation(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        return HttpResponse(p.evaluation)
+    except ValidationError:
+        return HttpResponse("")
+
+
+def update_evaluation(request, project_id):
+    try:
+        p = Project.objects.get(id=project_id)
+        p.evaluation = request.read().decode('utf-8')
+        p.save()
+    except ValidationError:
+        return HttpResponse("Failed")
+
+    return HttpResponse("Success")
+
+
+# returns all the info necessary to generate the documentation view for a project
 def get_documentation(request, project_id):
     measurements = Measurement.objects.filter(projectmeasurement__project_id_id=project_id)
 
@@ -140,43 +153,6 @@ def get_documentation(request, project_id):
         return HttpResponse("")
 
 
-def get_description(request, project_id):
-    try:
-        p = Project.objects.get(id=project_id)
-        return HttpResponse(p.description)
-    except ValidationError:
-        return HttpResponse("")
-
-
-def get_analysis(request, project_id):
-    try:
-        p = Project.objects.get(id=project_id)
-        return HttpResponse(p.analysis)
-    except ValidationError:
-        return HttpResponse("")
-
-
-def get_evaluation(request, project_id):
-    try:
-        p = Project.objects.get(id=project_id)
-        return HttpResponse(p.evaluation)
-    except ValidationError:
-        return HttpResponse("")
-
-
-def get_measurement(request, measurement_id):
-    try:
-        m = Measurement.objects.get(id=measurement_id)
-        response = {
-            "description": m.description,
-            "analysis": m.analysis,
-            "evaluation": m.evaluation
-        }
-        return HttpResponse(json.dumps(response))
-    except ValidationError:
-        return HttpResponse("")
-
-
 # Updates:
 #  - Description
 #  - Analysis
@@ -197,68 +173,6 @@ def update_documentation(request, project_id):
     return HttpResponse("Success")
 
 
-def update_description(request, project_id):
-    try:
-        p = Project.objects.get(id=project_id)
-        p.description = request.read().decode('utf-8')
-        p.save()
-    except ValidationError:
-        return HttpResponse("Failed")
-
-    return HttpResponse("Success")
-
-
-def update_analysis(request, project_id):
-    try:
-        p = Project.objects.get(id=project_id)
-        p.analysis = request.read().decode('utf-8')
-        p.save()
-    except ValidationError:
-        return HttpResponse("Failed")
-
-    return HttpResponse("Success")
-
-
-def update_evaluation(request, project_id):
-    try:
-        p = Project.objects.get(id=project_id)
-        p.evaluation = request.read().decode('utf-8')
-        p.save()
-    except ValidationError:
-        return HttpResponse("Failed")
-
-    return HttpResponse("Success")
-
-
-def update_measurement(request, measurement_id):
-    req_data = request.read().decode('utf-8')
-    data = json.loads(req_data)
-
-    try:
-        m = Measurement.objects.get(id=measurement_id)
-        m.description = data["description"]
-        m.analysis = data["analysis"]
-        m.evaluation = data["evaluation"]
-        m.save()
-    except ValidationError:
-        return HttpResponse("Failed")
-
-    return HttpResponse("Success")
-
-
-def get_users(request):
-    all_users = User.objects.all()
-    users = []
-
-    for user in all_users:
-        dictionary = {"id": str(user.id), "last_login": user.last_login, "username": user.username,
-                      "email": user.email, "last_name": user.last_name, "first_name": user.first_name}
-        users.append(dictionary)
-
-    f = json.dumps(users)
-    return HttpResponse(f)
-
-
 def new_project(request):
     project_data = QueryDict(request.readline().decode('utf-8'))
     new_proj = Project()
@@ -266,3 +180,5 @@ def new_project(request):
     new_proj.info = project_data['project-info']
     new_proj.save()
     return HttpResponse("<html><head><meta http-equiv='refresh' content='1; url=http://localhost:3000' /></head><body>Success <br /><br />2 Second until redirected ...</body></html>")
+
+
