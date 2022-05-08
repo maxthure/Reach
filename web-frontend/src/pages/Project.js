@@ -47,7 +47,9 @@ function Project() {
                 { createdAt } <br /> <br />
                 Description: { desciption } <br/>
                 Info: { info } <br/>
-                Issues: <br/>
+                Issues: <br/><br />
+
+                <Link to="measurements"><Button>See Measurements</Button></Link>
 
                 <div>
                     { issues.map((issue) => {

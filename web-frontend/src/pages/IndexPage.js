@@ -48,7 +48,7 @@ class ProjectList extends React.Component {
                         info={p.info}
                         projectId={p.id}
                         key={p.id}
-                        createdAt={this.prettifyDate(p.created_at)}
+                        createdAt={prettifyDate(p.created_at)}
                     />
                 )}
             </div>

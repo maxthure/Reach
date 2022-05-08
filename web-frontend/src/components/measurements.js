@@ -1,11 +1,11 @@
 import React from "react";
-import {Link} from "react-router-dom";
 
-import {prettifyDate} from "../config";
+import {backendUrl, prettifyDate} from "../config";
+import {Link, useParams} from "react-router-dom";
 
-function measurements(props) {
+function Measurements(props) {
 
-    console.log(props.measurements);
+    let { projectId } = useParams();
 
     let generateMeasurementTable = () => {
         return (
@@ -16,7 +16,7 @@ function measurements(props) {
                     <th>Date</th>
                     <th>Temperature</th>
                     <th>Screenshot</th>
-                    <th>awd</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,7 +25,8 @@ function measurements(props) {
                         <td>{m.description}</td>
                         <td>{prettifyDate(m.date_time)}</td>
                         <td>{m.temperature}</td>
-                        <td>More</td>
+                        <td>{m.screenshot_path}</td>
+                        <td><Link to={"/projects/project_" + projectId + "/measurements/" + m.id}>More</Link></td>
                     </tr>
                 ))}
                 </tbody>
@@ -40,4 +41,4 @@ function measurements(props) {
 
 }
 
-export default measurements;
+export default Measurements;
