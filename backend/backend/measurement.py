@@ -11,7 +11,12 @@ def get_measurement(request, measurement_id):
         response = {
             "description": m.description,
             "analysis": m.analysis,
-            "evaluation": m.evaluation
+            "evaluation": m.evaluation,
+            "screenshot_path": m.screenshot_path,
+            "setup_path": m.setup_path,
+            "raw_data_path": m.raw_data_path,
+            "date_time": str(m.date_time),
+            "temperature": m.temperature
         }
         return HttpResponse(json.dumps(response))
     except ValidationError:
