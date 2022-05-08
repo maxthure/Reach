@@ -145,7 +145,7 @@ def get_documentation(request, project_id):
             "description": p.description,
             "analysis": p.analysis,
             "evaluation": p.evaluation,
-            "measurements": dic
+            "measurements": meas
         }
         return HttpResponse(json.dumps(response))
     except ValidationError:
@@ -157,7 +157,8 @@ def get_documentation(request, project_id):
 #  - Analysis
 #  - Evaluation
 def update_documentation(request, project_id):
-    req_data = request.read().decode('utf-8')
+    req_data = request.read().decode('utf-8').replace("\n", "\\n")
+    print(req_data)
     data = json.loads(req_data)
 
     try:

@@ -6,7 +6,7 @@ import "../assets/css/elements.css"
 import { backendUrl } from "../config";
 import {Link, useParams} from "react-router-dom";
 import MdEditor from "for-editor";
-import {clear} from "@testing-library/user-event/dist/clear";
+import Measurements from "../components/measurements";
 
 function OnlineCollaboration() {
 
@@ -16,19 +16,8 @@ function OnlineCollaboration() {
     const [ description, setDescription ] = useState("");
     const [ experiment, setExperiment ] = useState("");
     const [ analysis, setAnalysis ] = useState("");
-    const [ syncedWithServer, setSyncedWithServer ] = useState(false);
-    const [ unsavedChanges, setUnsavedChanges ] = useState(false);
-
-    let sendDocumentationToServer = () => {
-        let data = "{\"description\": \"" + description + "\",\"analysis\": \"" + experiment + "\",\"evaluation\": \"" + analysis + "\"}";
-        fetch(
-            backendUrl + "/project/" + projectId + "/update-doc",
-            {
-                method: "POST",
-                headers: {'Content-Type': 'text/plain'},
-                body: data
-            });
-    }
+    const [ doc, setDoc ] = useState("__Fetching Documentation__ ...");
+    const [ measurements, setMeasurements ] = useState([]);
 
     let getDocumentationFromServer = () => {
         let clearProjectId = projectId.replace(/-/g, "");
@@ -38,41 +27,18 @@ function OnlineCollaboration() {
                 setDescription(json.description);
                 setExperiment(json.analysis);
                 setAnalysis(json.evaluation);
+
+                setMeasurements(json.measurements);
+
+                setDoc(
+                    " # Description\n" + description +
+                    "\n\n # Experiment\n" + experiment +
+                    "\n\n # Evaluation\n" + analysis
+                );
             });
     }
 
-    if (!syncedWithServer) {
-        getDocumentationFromServer();
-        setSyncedWithServer(true);
-    }
-
-    let handleChangeDescription = (newValue) => {
-        setDescription(newValue);
-        setUnsavedChanges(true);
-    }
-
-    let handleChangeExperiment = (newValue) => {
-        setExperiment(newValue);
-        setUnsavedChanges(true);
-    }
-
-    let handleChangeAnalysis = (newValue) => {
-        setAnalysis(newValue);
-        setUnsavedChanges(true);
-    }
-
-    let save = () => {
-        sendDocumentationToServer();
-        setDescription(description);
-        setUnsavedChanges(false);
-    }
-
-    let statusOfUnsavedChanges = () => {
-        if (unsavedChanges) {
-            return "Unsaved Changes ...";
-        }
-        return "Synced with Server";
-    }
+    getDocumentationFromServer();
 
     return (
         <div>
@@ -84,31 +50,30 @@ function OnlineCollaboration() {
                 <div className={"recent-changes"}>
                     <h2>Recent Changes:</h2>
                 </div>
-                <div className={"seperator"}/>
-                <div>
-                    { statusOfUnsavedChanges() }
-                </div>
-                <div id="documentation-body">
-                    <h1>Description</h1>
+                <div className={"seperator"} />
+                <Measurements
+                    measurements={measurements}
+                />
+                <div className={"documentation-body"}>
                     <MdEditor
-                        value={description}
-                        language={"en"}
-                        onChange={(val) => handleChangeDescription(val)}
-                        onSave={() => save()}
-                    />
-                    <h1>Experiment</h1>
-                    <MdEditor
-                        value={experiment}
-                        language={"en"}
-                        onChange={(val) => handleChangeExperiment(val)}
-                        onSave={() => save()}
-                    />
-                    <h1>Evaluation</h1>
-                    <MdEditor
-                        value={analysis}
-                        language={"en"}
-                        onChange={(val) => handleChangeAnalysis(val)}
-                        onSave={() => save()}
+                        preview={ true }
+                        language={ "en" }
+                        value={ doc }
+                        toolbar = {{
+                            h1: false,
+                            h2: false,
+                            h3: false,
+                            h4: false,
+                            img: false,
+                            link: false,
+                            code: false,
+                            preview: false,
+                            expand: true,
+                            undo: false,
+                            redo: false,
+                            save: false,
+                            subfield: false,
+                        }}
                     />
                 </div>
             </div>

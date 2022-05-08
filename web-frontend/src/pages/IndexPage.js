@@ -3,7 +3,7 @@ import '../assets/css/indexpage.css';
 import Navigation from "../components/navigation";
 import ProjectBanner from "../components/project-banner";
 import {Link} from "react-router-dom";
-import { backendUrl } from "../config";
+import { backendUrl, prettifyDate } from "../config";
 
 
 class ProjectList extends React.Component {
@@ -37,14 +37,6 @@ class ProjectList extends React.Component {
                     this.addProject(p);
                 }
             })
-    }
-
-    prettifyDate = (uglyDate) => {
-        let date = uglyDate.substr(0, 10);
-        let year = date.substr(0, 4);
-        let month = date.substr(5, 2);
-        let day = date.substr(8, 2);
-        return day + "." + month + "." + year;
     }
 
     render() {
