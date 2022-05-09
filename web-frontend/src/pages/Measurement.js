@@ -7,6 +7,8 @@ function Measurement() {
 
     let {projectId, measurementId} = useParams();
 
+    let [previousDataSynced, setPreviousDataSynced] = useState(false);
+
     let [description, setDescription] = useState("");
     let [analysis, setAnalysis] = useState("");
     let [evaluation, setEvaluation] = useState("");
@@ -33,6 +35,13 @@ function Measurement() {
             setRawDataPath(json.raw_data_path);
             setDateTime(json.date_time);
             setTemperature(json.temperature);
+
+            if (!previousDataSynced) {
+                setChangeDescription(json.description);
+                setChangeEvaluation(json.evaluation);
+                setChangeExperiment(json.analysis);
+                setPreviousDataSynced(true);
+            }
         });
 
     getMeasurement();
@@ -54,8 +63,10 @@ function Measurement() {
         } catch (e) {
             setSyncStatus("Failed")
         }
-
     }
+
+    let screenshotUrl = backendUrl + "/measurement/" + measurementId + "/screenshot";
+    console.log(screenshotUrl);
 
     return (
         <div>
@@ -72,20 +83,26 @@ function Measurement() {
                 Date Time: {dateTime} <br/>
                 Temperature: {temperature}
             </div>
+            <figure>
+                <img src={ screenshotUrl } />
+            </figure>
             <div>
                 <div>
                     {syncStatus}
                 </div>
                 <h4>Edit Measurement Info</h4>
                 <input
+                    value={changeDescription}
                     placeholder="Description"
                     onChange={(ev) => setChangeDescription(ev.target.value)}
                 /> <br/>
                 <input
+                    value={changeExperiment}
                     placeholder="Experiment"
                     onChange={(ev) => setChangeExperiment(ev.target.value)}
                 /> <br/>
                 <input
+                    value={changeEvaluation}
                     placeholder="Evaluation"
                     onChange={(ev) => setChangeEvaluation(ev.target.value)}
                 /> <br/>

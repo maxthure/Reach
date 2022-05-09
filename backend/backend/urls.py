@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from .project import index, project, get_description, update_description, get_analysis, update_analysis, get_evaluation, update_evaluation, get_documentation, update_documentation, new_project
 from .issue import issue
-from .measurement import get_measurement, update_measurement
+from .measurement import get_measurement, update_measurement, get_screenshot
 from .user import get_users
 from .testing import test_projects, test_index, test_documentation, test_issue
 
@@ -40,6 +40,7 @@ urlpatterns = [
 
     path('measurement/<str:measurement_id>/get-meas/', get_measurement),
     path('measurement/<str:measurement_id>/update-meas/', update_measurement),
+    path('measurement/<str:measurement_id>/screenshot/', get_screenshot),
 
     path('user/get-users/', get_users),
 
