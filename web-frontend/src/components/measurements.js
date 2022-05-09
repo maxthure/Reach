@@ -35,7 +35,7 @@ function Measurements(props) {
 
     return (
         <div>
-            {generateMeasurementTable()}
+            { generateMeasurementTable() }
         </div>
     );
 
