@@ -1,4 +1,5 @@
 import json
+import glob
 
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
@@ -37,3 +38,22 @@ def update_measurement(request, measurement_id):
         return HttpResponse("Failed")
 
     return HttpResponse("Success")
+
+def get_screenshot(request, measurement_id):
+    req_data = request.read().decode('utf-8')
+    screenshot_path = ""
+
+    try:
+        m = Measurement.objects.get(id=measurement_id)
+        screenshot_path = m.screenshot_path
+    except ValidationError:
+        return HttpResponse("Screenshot not found")
+
+    screenshots = glob.glob("." + screenshot_path + "/*")
+
+    for img in screenshots:
+        print(img)
+        with open(img, "rb") as imageFile:
+            return HttpResponse(imageFile.read(), content_type="image/png")
+
+    return HttpResponse("No screenshots found.")
