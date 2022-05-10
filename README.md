@@ -1,13 +1,21 @@
 # Reach
 
-Components:
+## Run
 
-- `backend`: The core processing unit of Reach.
+Run the backend:
+```
+cd backend
+python3 manage.py makemigrations
+python3 manage.py makemigrations projects
+python3 manage.py migrate
+python3 manage.py loaddata data_initial.json
+python3 manage.py runserver
+```
 
-- `device-doorman` :
-
-- `device-simulator`:
-
-- `web-frontend`:
-
-- `documentation`: The documentation of each of the components.
+Run the frontend:
+```
+cd web-frontend
+npm install
+npm install @mui/material @emotion/react @emotion/styled
+npm start
+```
